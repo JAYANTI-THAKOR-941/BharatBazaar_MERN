@@ -1,5 +1,7 @@
 import User from "../models/User.js";
 import transporter from "../config/sendOtp.js";
+import jwt from 'jsonwebtoken';
+
 
 export const registerUser = async (req, res) => {
     const { name, email, password } = req.body; 
@@ -23,11 +25,13 @@ export const registerUser = async (req, res) => {
             `,
         })
 
-        req.flash('info','Otp sent successfully.!!');
-        res.redirect('/verify');
+        // req.flash('info','Otp sent successfully.!!');
+        // res.redirect('/verify');
+        res.status(201).json({message:"Otp sent successfully.!!"});
     } catch (error) {
-        console.error("Error during user registration:", error);
-        res.redirect('/register');
+        // console.error("Error during user registration:", error);
+        // res.redirect('/register');
+        res.status(501).json({message:error.message});
     } 
 };
 
@@ -44,16 +48,18 @@ export const verifyOtp = async (req, res) => {
             user.isVerified = true;
             user.otp = null;
             await user.save();
-            req.flash('success', 'Email verified successfully. You can now log in.');
-            res.redirect('/login');           
+            // req.flash('success', 'Email verified successfully. You can now log in.');
+            // res.redirect('/login');    
+            res.status(201).json({message:"Email verified successfully. You can now log in."});       
         }
         else {
             req.flash('error', 'Invalid OTP. Please try again.');
             res.redirect('/verify');
         }
     } catch (error) {
-        console.error("Error during OTP verification:", error);
-        res.redirect('/verify');
+        // console.error("Error during OTP verification:", error);
+        // res.redirect('/verify');
+        res.status(501).json({message:error.message});
     }
 };
 
@@ -74,11 +80,18 @@ export const loginUser = async(req,res)=>{
             req.flash('error','Incorrect password. Please try again.');
             return res.redirect('/login');
         }
-        req.session.userId = user._id;
-        req.flash('success','Logged in successfully.');
-        res.redirect('/dashboard');
+
+        const token = jwt.sign(
+            {
+                id:user._id,
+                role:user.role,
+            },
+            process.env.JWT_SECRET,
+            {expiresIn:"7d"}
+        )
+
+        res.status(201).json(token,{message:"Login Successfully..!!"});
     } catch (error) {
-        console.error("Error during user login:", error);
-        res.redirect('/login');
+        res.status(501).json({message:error.message});
     }   
 };
