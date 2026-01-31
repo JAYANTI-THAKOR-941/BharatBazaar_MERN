@@ -72,9 +72,13 @@ app.get('/logout', (req, res) => {
 // Import and use user routes
 import userRoutes from './routes/userRoutes.js';
 import productRoutes from './routes/productRoutes.js'
+import categoryRoutes from './routes/categoryRoutes.js'
+import subCategoryRoutes from './routes/subCategoryRoutes.js'
 
 app.use('/api/user', userRoutes);
 app.use('/api/product',productRoutes);
+app.use('/api/category',categoryRoutes);
+app.use('/api/sub-category',subCategoryRoutes);
 
 // Connect to the database
 import connectDB from './config/db.js';
