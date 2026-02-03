@@ -1,0 +1,17 @@
+.register-container{
+    text-align: center;
+    align-content: center;
+    align-items: center;
+    margin: auto;
+    margin-top: 8%;
+}
+form{
+    width: 500px;
+    margin: auto;
+    text-align: left;
+}
+input{
+    width: 100%;
+    padding: 12px;
+    margin: 5px 0;
+}

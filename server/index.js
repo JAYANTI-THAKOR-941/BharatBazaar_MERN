@@ -4,6 +4,7 @@ import session from 'express-session';
 import flash from 'connect-flash';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import cors from 'cors';
 
 dotenv.config();
 const app = express();
@@ -18,6 +19,7 @@ app.use(session({
     saveUninitialized: true
 }));
 app.use(flash());
+app.use(cors());
 
 // Set up EJS as the templating engine
 const __filename = fileURLToPath(import.meta.url);
